@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Match Tracking</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+  <ion-row>
+    <ion-col size="5">
+      <div id="p1name">
+        
+      </div>
+    </ion-col>
+    <ion-col size="1">
+      <div id="p1set1">
+        0
+      </div>
+    </ion-col>
+    <ion-col size="1">
+      <div id="p1set2">
+        0
+      </div>
+    </ion-col>
+    <ion-col size="1">
+      <div id="p1game">
+        0
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="5">
+      <div id="p2name">
+        Will
+      </div>
+    </ion-col>
+    <ion-col size="1">
+      <div id="p2set1">
+        0
+      </div>
+    </ion-col>
+    <ion-col size="1">
+      <div id="p2set2">
+        0
+      </div>
+    </ion-col>
+    <ion-col size="1">
+      <div id="p2game">
+        0
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<ion-item>
+  <ion-label color="primary">Shot Count:</ion-label>
+  <ion-input placeholder="Enter Shots"></ion-input>
+</ion-item>
+<ion-button onclock="addPoint()" class="button-full">Add Point</ion-button>
+</ion-content>
