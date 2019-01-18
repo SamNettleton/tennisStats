@@ -10,12 +10,11 @@ export class MatchHistoryService {
   constructor() { }
 
   getMatches(): Match[] {
-    debugger;
     return this.MATCHES;
   }
 
-  addMatch(Match: match) {
-    debugger;
+  addMatch(match: Match) {
     this.MATCHES.push(match);
   }
+
 }

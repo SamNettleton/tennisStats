@@ -18,6 +18,7 @@ export class Match {
     public p1stbpoints: number = 0;
     public p2stbpoints: number = 0;
     public matchFinished: boolean = false;
+    public fullThird: boolean = false;
 
     constructor(p1name: string, p2name: string, gamesPerSet: number, sets: number, firstServer: number) {
         this.p1name = p1name;
@@ -28,7 +29,11 @@ export class Match {
     }
 
     getPlayerNames() {
-      return [self.p1name, self.p2name]
+      return [this.p1name, this.p2name];
+    }
+
+    getCurrentServer() {
+      return this.server;
     }
 
     changeServer() {
@@ -56,46 +61,51 @@ export class Match {
     givePoint(shots: number) {
         //gives the winner of the previous point a point in either their game score, tiebreaker, or super tiebreaker
         let winner: number;
-        let p1pointTypes: number[] = [this.p1points, this.p1tbpoints, this.p1stbpoints];
-        let p2pointTypes: number[] = [this.p2points, this.p2tbpoints, this.p2stbpoints];
-        let pointLists: number[][] = [p1pointTypes, p2pointTypes];
         if (this.server == 1) {
             if (shots % 2 == 0) {
-                //this.p2points++;
                 winner = 2;
             } else {
                 //p1 won, decide point type
-                //this.p1points++;
                 winner = 1;
             }
         } else {
             if (shots % 2 == 0) {
                 //p1 won, decide point type
-                //this.p1points++;
                 winner = 1;
             } else {
-                //this.p2points++;
                 winner = 2;
             }
         }
         //determine point type based on breakers
-        if (this.p1games[-1] == this.gamesPerSet && this.p2games[-1] == this.gamesPerSet) {
+        if (this.p1games[this.p1games.length-(this.p1sets + this.p2sets)-1] == this.gamesPerSet && this.p2games[this.p2games.length-(this.p1sets + this.p2sets)-1] == this.gamesPerSet) {
             //regular tiebreaker
-            pointLists[winner - 1][1]++;
+            if (winner == 1) {
+              this.p1tbpoints++;
+            } else {
+              this.p2tbpoints++;
+            }
             //change server if total points are odd
             if ((this.p1tbpoints + this.p2tbpoints) % 2 == 1) {
                 this.changeServer();
             }
-        } else if (this.p1sets == 1 && this.p2sets == 1) {
+        } else if (this.p1sets == 1 && this.p2sets == 1 && this.fullThird == false) {
             //super tiebreaker
-            pointLists[winner - 1][2]++;
+            if (winner == 1) {
+              this.p1stbpoints++;
+            } else {
+              this.p2stbpoints++;
+            }
             //change server if total points are odd
             if ((this.p1stbpoints + this.p2stbpoints) % 2 == 1) {
                 this.changeServer();
             }
         } else {
             //normal game
-            pointLists[winner - 1][0]++;
+            if (winner == 1) {
+              this.p1points++;
+            } else {
+              this.p2points++;
+            }
         }
 
     }
@@ -106,60 +116,76 @@ export class Match {
             this.p1points = 0;
             this.p2points = 0;
             this.changeServer();
-            this.p1games[-1]++;
+            this.p1games[this.p1games.length - 1]++;
         } else if ((this.p2points >= 4) && (this.p2points - this.p1points >= 2)) {
             //if p2 has 4 or more points and has >= 2 more points than p1
             this.p1points = 0;
             this.p2points = 0;
             this.changeServer();
-            this.p2games[-1]++;
-        } else if (this.p1games[-1] == this.gamesPerSet && this.p2games[-1] < this.gamesPerSet - 1 || this.p1games[-1] == this.gamesPerSet + 1) {
-            //if p1 has 6 games and p2 has less than 5, or if p1 has 7 games
-            this.p1points = 0;
-            this.p2points = 0;
-            this.p1games.push(0);
-            this.p2games.push(0);
-            this.changeServer();
-            this.p1sets++;
-        } else if (this.p2games[-1] == this.gamesPerSet && this.p1games[-1] < this.gamesPerSet - 1 || this.p2games[-1] == this.gamesPerSet + 1) {
-            //if p2 has 6 games and p1 has less than 5, or if p2 has 7 games
-            this.p1points = 0;
-            this.p2points = 0;
-            this.p1games.push(0);
-            this.p2games.push(0);
-            this.changeServer();
-            this.p2sets++;
-        } else if (this.p1tbpoints >= 7 && this.p1tbpoints - this.p2tbpoints > 1) {
+            this.p2games[this.p2games.length - 1]++;
+        }
+
+        //handle breakers
+        if (this.p1tbpoints >= 7 && this.p1tbpoints - this.p2tbpoints > 1) {
             //if p1 won a tiebreaker
-            this.p1points = 0;
-            this.p2points = 0;
             this.p1tbpoints = 0;
             this.p2tbpoints = 0;
-            this.p1games[-1]++;
-            this.p1games.push(0);
-            this.p2games.push(0);
-            this.p1sets++;
+            this.p1games[this.p1games.length - 1]++;
             if (this.server == this.firstServer ) {
                 this.changeServer();
             }
         } else if (this.p2tbpoints >= 7 && this.p2tbpoints - this.p1tbpoints > 1) {
-            //if p1 won a tiebreaker
-            this.p1points = 0;
-            this.p2points = 0;
+            //if p2 won a tiebreaker
             this.p1tbpoints = 0;
             this.p2tbpoints = 0;
-            this.p2games[-1]++;
-            this.p1games.push(0);
-            this.p2games.push(0);
+            this.p2games[this.p2games.length - 1]++;
             if (this.server == this.firstServer ) {
                 this.changeServer();
             }
+        }
+
+        //handle SUPER breakers
+        if (this.p1stbpoints >= 10 && this.p1stbpoints - this.p2stbpoints > 1) {
+          //if p1 won a super tiebreaker
+          this.p1games[this.p1games.length - 1]++;
+        } else if (this.p2stbpoints >= 10 && this.p2stbpoints - this.p1stbpoints > 1) {
+          //if p2 won a super tiebreaker
+          this.p2games[this.p2games.length - 1]++;
+        }
+
+        //handle and of set
+        if (this.p1games[this.p1games.length-1] == this.gamesPerSet && this.p2games[this.p2games.length-1] < this.gamesPerSet - 1 || this.p1games[this.p1games.length-1] == this.gamesPerSet + 1) {
+            //if p1 has 6 games and p2 has less than 5, or if p1 has 7 games
+            this.p1games.push(0);
+            this.p2games.push(0);
+            this.p1sets++;
+        } else if (this.p2games[this.p2games.length-1] == this.gamesPerSet && this.p1games[this.p1games.length-1] < this.gamesPerSet - 1 || this.p2games[this.p2games.length-1] == this.gamesPerSet + 1) {
+            //if p2 has 6 games and p1 has less than 5, or if p2 has 7 games
+            this.p1games.push(0);
+            this.p2games.push(0);
             this.p2sets++;
         }
+
     }
 
-    getScore() {
-        //returns the current score of each set and the current game score
-        return [this.p1games, this.p1points, this.p2games, this.p2points];
+    getSetScore() {
+      //returns the current score of each set
+      return [this.p1games, this.p2games];
     }
+
+    getGameScore() {
+      //returns the current game score
+      return [this.p1points, this.p2points];
+    }
+
+    getTiebreakerScore() {
+      //retruns the current tiebreaker score
+      return [this.p1tbpoints, this.p2tbpoints];
+    }
+
+    getSuperScore() {
+      //retruns the current super tiebreaker score
+      return [this.p1stbpoints, this.p2stbpoints];
+    }
+
 }
