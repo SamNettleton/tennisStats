@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatchHistoryService } from '../matchhistory.service';
 import { Match } from "src/app/match";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-track-match',
@@ -14,9 +15,9 @@ export class TrackMatchPage implements OnInit {
   public currentMatch: Match;
   public setScore: number[][];
   public gameScore: number[];
-  public p1scoreElements: HTMLCollectionOf<Element>;
-  public p2scoreElements: HTMLCollectionOf<Element>;
-  constructor(private matchHistoryService: MatchHistoryService) { }
+  public p1scoreElements: HTMLElement[];
+  public p2scoreElements: HTMLElement[];
+  constructor(private matchHistoryService: MatchHistoryService, private router: Router) { }
 
   ngOnInit() {
     this.getMatches();
@@ -26,7 +27,13 @@ export class TrackMatchPage implements OnInit {
     btn.addEventListener("click", (e:Event) => this.addPoint());
     let increasebtn = document.getElementById("increase-shots");
     increasebtn.addEventListener("click", (e:Event) => this.increaseShots());
+    /*let statsBtn = document.getElementById("view-stats");
+    statsBtn.addEventListener("click", (e:Event) => this.navigateToStats());*/
     this.displayServer();
+  }
+
+  navigateToStats() {
+    this.router.navigate(['tabs']);
   }
 
   getMatches(): void {
@@ -40,33 +47,56 @@ export class TrackMatchPage implements OnInit {
   }
 
   addPoint() {
+    //get the current shot count
+    let shotCounter: HTMLElement = document.getElementById("shot-counter");
+    this.shots = shotCounter.innerHTML;
     this.currentMatch.addPoint(Number(this.shots));
     this.setScore = this.currentMatch.getSetScore();
     this.gameScore = this.currentMatch.getGameScore();
-    this.p1scoreElements = document.getElementsByClassName("p1score");
-    this.p2scoreElements = document.getElementsByClassName("p2score");
+    this.p1scoreElements = this.getElements('p1score');
+    this.p2scoreElements = this.getElements('p2score');
+    //this.p1scoreElements = document.getElementsByClassName("p1score");
+    //this.p2scoreElements = document.getElementsByClassName("p2score");
     //update the score of all the setScore
     this.displaySetScore();
     //set score of current game, tiebreaker, or super tiebreaker
     this.displayGameScore();
     //check server
     this.displayServer();
+    //clear the shot counter
+    shotCounter.innerHTML = "0";
+  }
+
+  getElements(initialText: String) {
+    var htmlElements: HTMLElement[] = [];
+    for (let i = 0; i < 6; i++) {
+      htmlElements.push(document.getElementById(initialText + i.toLocaleString()));
+    }
+    return htmlElements;
   }
 
   displaySetScore() {
     for (let i = 0; i < this.setScore[0].length; i++) {
-      this.p1scoreElements[i].parentElement.style = "background-color:orange; color:black;"
-      this.p2scoreElements[i].parentElement.style = "background-color:orange; color:black;"
+      this.p1scoreElements[i].parentElement.style.backgroundColor = 'orange';
+      this.p2scoreElements[i].parentElement.style.backgroundColor = 'orange';
+      this.p1scoreElements[i].parentElement.style.color = 'black';
+      this.p2scoreElements[i].parentElement.style.color = 'black';
+      this.p1scoreElements[i].parentElement.classList.remove("game-score");
+      this.p2scoreElements[i].parentElement.classList.remove("game-score");
       //set past set scores with bolded winner
       if (this.setScore[0][i] > this.setScore[1][i] && i < this.setScore[0].length - 1) {
-        this.p1scoreElements[i].style = "font-weight:bold; background-color:orange; color:black;";
+        this.p1scoreElements[i].style.fontWeight = 'bold';
+        this.p1scoreElements[i].style.backgroundColor = 'orange';
+        this.p1scoreElements[i].style.color = 'black';
       } else if (i < this.setScore[0].length - 1) {
-        this.p2scoreElements[i].style = "font-weight:bold; background-color:orange; color:black;";
+        this.p2scoreElements[i].style.fontWeight = 'bold';
+        this.p2scoreElements[i].style.backgroundColor = 'orange';
+        this.p2scoreElements[i].style.color = 'black';
       }
       this.p1scoreElements[i].innerHTML = this.setScore[0][i].toLocaleString();
       this.p2scoreElements[i].innerHTML = this.setScore[1][i].toLocaleString();
-      this.p1scoreElements[i].parentElement.size = "1";
-      this.p2scoreElements[i].parentElement.size = "1";
+      this.p1scoreElements[i].parentElement.classList.add("set-score");
+      this.p2scoreElements[i].parentElement.classList.add("set-score");
     }
   }
 
@@ -107,10 +137,10 @@ export class TrackMatchPage implements OnInit {
 
       this.p1scoreElements[this.setScore[0].length].innerHTML = modifiedGameScores[0];
       this.p2scoreElements[this.setScore[0].length].innerHTML = modifiedGameScores[1];
-      //this.p1scoreElements[this.setScore[0].length].parentElement.style = "background-color:white; color:black;"
-      //this.p2scoreElements[this.setScore[0].length].parentElement.style = "background-color:white; color:black;"
-      this.p1scoreElements[this.setScore[0].length].parentElement.size = "2";
-      this.p2scoreElements[this.setScore[0].length].parentElement.size = "2";
+      this.p1scoreElements[this.setScore[0].length].parentElement.classList.remove("set-score");
+      this.p2scoreElements[this.setScore[0].length].parentElement.classList.remove("set-score");
+      this.p1scoreElements[this.setScore[0].length].parentElement.classList.add("game-score");
+      this.p2scoreElements[this.setScore[0].length].parentElement.classList.add("game-score");
     }
 
   }

@@ -15,33 +15,33 @@
       <div id="p1name">
       </div>
     </ion-col>
-    <ion-col size="1" style="background-color:orange; color:black;">
-      <div class="p1score" id="p1set1">
+    <ion-col class="set-score" style="background-color:orange; color:black;">
+      <div id="p1score0">
         0
       </div>
     </ion-col>
-    <ion-col size="1" style="background-color:white; color:black;">
-      <div class="p1score" id="p1set2">
+    <ion-col class="game-score" style="background-color:white; color:black;">
+      <div id="p1score1">
         0
       </div>
     </ion-col>
-    <ion-col size="1" style="background-color:white; color:black;">
-      <div class="p1score" id="p1game">
+    <ion-col class="set-score" style="background-color:white; color:black;">
+      <div id="p1score2">
 
       </div>
     </ion-col>
-    <ion-col size="1" style="background-color:white; color:black;">
-      <div class="p1score">
+    <ion-col class="set-score" style="background-color:white; color:black;">
+      <div id="p1score3">
 
       </div>
     </ion-col>
-    <ion-col size="1" style="background-color:white; color:black;">
-      <div class="p1score">
+    <ion-col class="set-score" style="background-color:white; color:black;">
+      <div id="p1score4">
 
       </div>
     </ion-col>
-    <ion-col size="1" style="background-color:white; color:black;">
-      <div class="p1score">
+    <ion-col class="set-score" style="background-color:white; color:black;">
+      <div id="p1score5">
 
       </div>
     </ion-col>
@@ -55,37 +55,38 @@
       <div id="p2name">
       </div>
     </ion-col>
-    <ion-col size="1" style="background-color:orange; color:black;">
-      <div class="p2score" id="p2set1">
+    <ion-col class="set-score" style="background-color:orange; color:black;">
+      <div id="p2score0">
         0
       </div>
     </ion-col>
-    <ion-col size="1" style="background-color:white; color:black;">
-      <div class="p2score" id="p2set2">
+    <ion-col class="game-score"style="background-color:white; color:black;">
+      <div id="p2score1">
         0
       </div>
     </ion-col>
-    <ion-col size="1" style="background-color:white; color:black;">
-      <div class="p2score" id="p2game">
+    <ion-col class="set-score" style="background-color:white; color:black;">
+      <div id="p2score2">
       </div>
     </ion-col>
-    <ion-col size="1" style="background-color:white; color:black;">
-      <div class="p2score">
+    <ion-col class="set-score" style="background-color:white; color:black;">
+      <div id="p2score3">
       </div>
     </ion-col>
-    <ion-col size="1" style="background-color:white; color:black;">
-      <div class="p2score">
+    <ion-col class="set-score" style="background-color:white; color:black;">
+      <div id="p2score4">
       </div>
     </ion-col>
-    <ion-col size="1" style="background-color:white; color:black;">
-      <div class="p2score">
+    <ion-col class="set-score" style="background-color:white; color:black;">
+      <div id="p2score5">
       </div>
     </ion-col>
   </ion-row>
 </ion-grid>
-<ion-input disabled="true" id="shot-counter" [(ngModel)]="shots">
+<div id="shot-counter">
   0
-</ion-input>
+</div>
 <ion-button id="submit-shots" class="button-full">Add Point</ion-button>
 <ion-button id="increase-shots" class="button-full">+</ion-button>
+<ion-button id="view-stats" routerLink="/tabs" class="button-full">View Stats</ion-button>
 </ion-content>

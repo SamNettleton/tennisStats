@@ -38,16 +38,16 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: '/tabs/tab2',
+        redirectTo: '/tabs/(tab2:tab2)',
         pathMatch: 'full'
       }
     ]
   },
-  {
+  /*{
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/tabs/(tab2:tab2)',
     pathMatch: 'full'
-  }
+  }*/
 ];
 
 @NgModule({
