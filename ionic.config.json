@@ -1,6 +1,8 @@
 {
   "name": "tennisStats",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular",
   "id": "5baf79d1"
 }

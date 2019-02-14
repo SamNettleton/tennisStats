@@ -8,10 +8,13 @@ import { TabsPageRoutingModule } from './tabs.router.module';
 
 import { TabsPage } from './tabs.page';
 
+import {NgxEchartsModule} from 'ngx-echarts';
+
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
+    NgxEchartsModule,
     FormsModule,
     TabsPageRoutingModule
   ],

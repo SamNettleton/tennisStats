@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Storage } from '@ionic/storage';
+import { MatchHistoryService } from '../matchhistory.service';
+import { Match } from "src/app/match";
 
 @Component({
   selector: 'app-home',
@@ -7,9 +10,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomePage implements OnInit {
 
-  constructor() { }
+  private matches: Match[]
+  constructor( private matchHistoryService: MatchHistoryService ) { }
 
   ngOnInit() {
+    this.matches = this.matchHistoryService.getMatches();
   }
 
 }

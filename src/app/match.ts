@@ -1,3 +1,5 @@
+import { MatchStorageService } from './match-storage.service';
+
 export class Match {
     p1name: string
     p2name: string
@@ -19,8 +21,13 @@ export class Match {
     public p2stbpoints: number = 0;
     public matchFinished: boolean = false;
     public fullThird: boolean = false;
+    public statHistory: number[][] = [];
+    public p1scoreHistory: number[][] = [];
+    public p2scoreHistory: number[][] = [];
+    public id: string = "initialID";
 
-    constructor(p1name: string, p2name: string, gamesPerSet: number, sets: number, firstServer: number) {
+    constructor(p1name: string, p2name: string, gamesPerSet: number, sets: number, firstServer: number, id: string) {
+        this.id = id;
         this.p1name = p1name;
         this.p2name = p2name;
         this.gamesPerSet = gamesPerSet;
@@ -36,6 +43,14 @@ export class Match {
       return this.server;
     }
 
+    getRallyLengths(player: number) {
+      if (player == 1) {
+        return this.p1lengths;
+      } else {
+        return this.p2lengths;
+      }
+    }
+
     changeServer() {
         //if p1 is serving, change to p2, if p2 is serving, change to p1
         if (this.server == 1) {
@@ -46,6 +61,7 @@ export class Match {
     }
 
     addPoint(shots: number) {
+        this.recordHistory(shots);
         //add the point to the lengths list of current server
         if (this.server == 1) {
             this.p1lengths.push(shots);
@@ -56,6 +72,43 @@ export class Match {
         this.givePoint(shots);
         //check points to see if a player won a game, set, or match
         this.checkPoints();
+    }
+
+    recordHistory(shots: number) {
+      //history is taken in this order:
+      //0: server (1 or 2), 1: rally length
+      this.statHistory.push([this.server, shots]);
+      var p1currentScore: number[] = [this.p1points];
+      var p2currentScore: number[] = [this.p2points];
+      for (let i = 0; i < this.p1games.length; i++) {
+        p1currentScore.push(this.p1games[i]);
+        p2currentScore.push(this.p2games[i]);
+      }
+      this.p1scoreHistory.push(p1currentScore);
+      this.p2scoreHistory.push(p2currentScore);
+    }
+
+    undoPoint() {
+      //remove the last point stats
+      if (this.statHistory[this.statHistory.length - 1][0] == 1) {
+        this.p1lengths = this.p1lengths.slice(0, this.p1lengths.length - 1);
+      } else {
+        this.p2lengths = this.p2lengths.slice(0, this.p2lengths.length - 1);
+      }
+      this.statHistory = this.statHistory.slice(0, this.statHistory.length - 1);
+      //remove the last point from score
+      var p1newGames: number[] = [];
+      var p2newGames: number[] = [];
+      this.p1points = this.p1scoreHistory[this.p1scoreHistory.length - 1][0];
+      this.p2points = this.p2scoreHistory[this.p2scoreHistory.length - 1][0];
+      for (let i = 1; i < this.p1scoreHistory[this.p1scoreHistory.length - 1].length; i++) {
+        p1newGames.push(this.p1scoreHistory[this.p1scoreHistory.length - 1][i]);
+        p2newGames.push(this.p2scoreHistory[this.p2scoreHistory.length - 1][i]);
+      }
+      this.p1games = p1newGames;
+      this.p2games = p2newGames;
+      this.p1scoreHistory = this.p1scoreHistory.slice(0, this.p1scoreHistory.length - 1);
+      this.p2scoreHistory = this.p2scoreHistory.slice(0, this.p2scoreHistory.length - 1);
     }
 
     givePoint(shots: number) {

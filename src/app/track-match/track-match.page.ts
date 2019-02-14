@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatchHistoryService } from '../matchhistory.service';
 import { Match } from "src/app/match";
 import { Router } from '@angular/router';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-track-match',
@@ -20,15 +21,32 @@ export class TrackMatchPage implements OnInit {
   constructor(private matchHistoryService: MatchHistoryService, private router: Router) { }
 
   ngOnInit() {
-    this.getMatches();
-    document.getElementById('p1name').innerHTML = this.currentMatch.getPlayerNames()[0];
-    document.getElementById('p2name').innerHTML = this.currentMatch.getPlayerNames()[1];
+
     let btn = document.getElementById("submit-shots");
     btn.addEventListener("click", (e:Event) => this.addPoint());
     let increasebtn = document.getElementById("increase-shots");
     increasebtn.addEventListener("click", (e:Event) => this.increaseShots());
-    /*let statsBtn = document.getElementById("view-stats");
-    statsBtn.addEventListener("click", (e:Event) => this.navigateToStats());*/
+    let decreasebtn = document.getElementById("decrease-shots");
+    decreasebtn.addEventListener("click", (e:Event) => this.decreaseShots());
+    let statsBtn = document.getElementById("view-stats");
+    statsBtn.addEventListener("click", (e:Event) => this.navigateToStats());
+    let undoBtn = document.getElementById("undo-point");
+    undoBtn.addEventListener("click", (e:Event) => this.undoPoint());
+
+  }
+
+  ngAfterContentInit() {
+    this.getMatches();
+    document.getElementById('p1name').innerHTML = this.currentMatch.getPlayerNames()[0];
+    document.getElementById('p2name').innerHTML = this.currentMatch.getPlayerNames()[1];
+    this.setScore = this.currentMatch.getSetScore();
+    this.gameScore = this.currentMatch.getGameScore();
+    this.p1scoreElements = this.getElements('p1score');
+    this.p2scoreElements = this.getElements('p2score');
+    //update the score of all the setScore
+    this.displaySetScore();
+    //set score of current game, tiebreaker, or super tiebreaker
+    this.displayGameScore();
     this.displayServer();
   }
 
@@ -37,13 +55,21 @@ export class TrackMatchPage implements OnInit {
   }
 
   getMatches(): void {
-    this.matches = this.matchHistoryService.getMatches();
-    this.currentMatch = this.matches[0];
+    this.currentMatch = this.matchHistoryService.getCurrentMatch();
+    //this.matches = this.matchHistoryService.getMatches();
+    //this.currentMatch = this.matches[0];
   }
 
   increaseShots() {
     let shotCounter: HTMLElement = document.getElementById("shot-counter");
     shotCounter.innerHTML = (Number(shotCounter.innerHTML) + 1).toLocaleString();
+  }
+
+  decreaseShots() {
+    let shotCounter: HTMLElement = document.getElementById("shot-counter");
+    if (Number(shotCounter.innerHTML) != 0) {
+      shotCounter.innerHTML = (Number(shotCounter.innerHTML) - 1).toLocaleString();
+    }
   }
 
   addPoint() {
@@ -65,6 +91,20 @@ export class TrackMatchPage implements OnInit {
     this.displayServer();
     //clear the shot counter
     shotCounter.innerHTML = "0";
+  }
+
+  undoPoint() {
+    this.currentMatch.undoPoint();
+    this.setScore = this.currentMatch.getSetScore();
+    this.gameScore = this.currentMatch.getGameScore();
+    this.p1scoreElements = this.getElements('p1score');
+    this.p2scoreElements = this.getElements('p2score');
+    //update the score of all the setScore
+    this.displaySetScore();
+    //set score of current game, tiebreaker, or super tiebreaker
+    this.displayGameScore();
+    //check server
+    this.displayServer();
   }
 
   getElements(initialText: String) {

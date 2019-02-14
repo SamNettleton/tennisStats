@@ -4,8 +4,12 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-grid>
+<ion-content scroll="false">
+
+<div class="box">
+
+<div class="row header">
+<ion-grid>
   <ion-row>
     <ion-col size="1" style="background-color:orange; color:black;">
       <div id="p1serving">
@@ -83,10 +87,43 @@
     </ion-col>
   </ion-row>
 </ion-grid>
-<div id="shot-counter">
-  0
+
+<ion-grid>
+  <ion-row>
+    <ion-col size="6" offset="0">
+      <div id="shot-counter-label">
+        Rally Length:
+      </div>
+    </ion-col>
+    <ion-col size="3">
+      <div id="shot-counter">
+        0
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="6">
+      <ion-button id="undo-point" class="button-full">Undo Point</ion-button>
+    </ion-col>
+    <ion-col size="6">
+      <ion-button id="view-stats" class="button-full">View Stats</ion-button>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="6">
+      <ion-button id="decrease-shots" class="button-full">-</ion-button>
+    </ion-col>
+    <ion-col size="6">
+      <ion-button id="submit-shots" class="button-full">Submit Point</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
 </div>
-<ion-button id="submit-shots" class="button-full">Add Point</ion-button>
-<ion-button id="increase-shots" class="button-full">+</ion-button>
-<ion-button id="view-stats" routerLink="/tabs" class="button-full">View Stats</ion-button>
+
+
+    <ion-button id="increase-shots" class="row content">+</ion-button>
+
+
+
+</div>
 </ion-content>
