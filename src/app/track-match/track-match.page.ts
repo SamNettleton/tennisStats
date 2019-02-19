@@ -3,6 +3,7 @@ import { MatchHistoryService } from '../matchhistory.service';
 import { Match } from "src/app/match";
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
+import { Platform, IonList } from '@ionic/angular';
 
 @Component({
   selector: 'app-track-match',
@@ -12,16 +13,19 @@ import { Storage } from '@ionic/storage';
 export class TrackMatchPage implements OnInit {
 
   public shots: string;
-  public matches: Match[];
   public currentMatch: Match;
+  public matches: Match[];
   public setScore: number[][];
   public gameScore: number[];
   public p1scoreElements: HTMLElement[];
   public p2scoreElements: HTMLElement[];
-  constructor(private matchHistoryService: MatchHistoryService, private router: Router) { }
+  constructor(private matchHistoryService: MatchHistoryService, private router: Router, private plt: Platform) {
+    this.plt.ready().then(() => {
+
+    });
+  }
 
   ngOnInit() {
-
     let btn = document.getElementById("submit-shots");
     btn.addEventListener("click", (e:Event) => this.addPoint());
     let increasebtn = document.getElementById("increase-shots");
@@ -36,7 +40,8 @@ export class TrackMatchPage implements OnInit {
   }
 
   ngAfterContentInit() {
-    this.getMatches();
+    this.loadMatches();
+    this.setCurrentMatch();
     document.getElementById('p1name').innerHTML = this.currentMatch.getPlayerNames()[0];
     document.getElementById('p2name').innerHTML = this.currentMatch.getPlayerNames()[1];
     this.setScore = this.currentMatch.getSetScore();
@@ -54,10 +59,15 @@ export class TrackMatchPage implements OnInit {
     this.router.navigate(['tabs']);
   }
 
-  getMatches(): void {
-    this.currentMatch = this.matchHistoryService.getCurrentMatch();
-    //this.matches = this.matchHistoryService.getMatches();
-    //this.currentMatch = this.matches[0];
+  loadMatches(): void {
+    this.matchHistoryService.getMatches().then(items => {
+      this.matches = items;
+      console.log(this.matches);
+    });
+  }
+
+  setCurrentMatch() {
+    this.currentMatch = this.matches[this.matchHistoryService.getActive()];
   }
 
   increaseShots() {

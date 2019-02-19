@@ -19,5 +19,28 @@
 </ion-header>
 
 <ion-content padding>
-
+  <ion-list *ngFor="let m of matches" (click)="viewMatch(m)">
+    <ion-card>
+      <ion-card-header>
+        {{m.p1name}} Vs. {{m.p2name}}
+      </ion-card-header>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            {{m.p1name}}
+          </ion-col>
+          <div *ngFor="let set of m.p1games">
+            <ion-col>
+              {{set}}
+            </ion-col>
+          </div>
+          <div>
+            <ion-col>
+              {{m.p1formatted}}
+            </ion-col>
+          </div>
+        </ion-row>
+    </ion-grid>
+    </ion-card>
+  </ion-list>
 </ion-content>

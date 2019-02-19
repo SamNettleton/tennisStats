@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Match } from "src/app/match";
 import { MatchHistoryService } from '../matchhistory.service';
+import { Platform, IonList } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab1',
@@ -15,7 +16,11 @@ export class Tab1Page {
   public serverWins: number[][] = [];
   public serverLosses: number[][] = [];
 
-  constructor(private matchHistoryService: MatchHistoryService) {}
+  constructor(private matchHistoryService: MatchHistoryService, private plt: Platform) {
+    this.plt.ready().then(() => {
+      this.loadItems();
+    });
+  }
 
   ngOnInit() {
     this.getMatches();
@@ -23,8 +28,15 @@ export class Tab1Page {
     this.sortData();
   }
 
+  loadItems() {
+    this.matchHistoryService.getMatches().then(items => {
+      this.matches = items;
+    });
+  }
+
   getMatches(): void {
-    this.currentMatch = this.matchHistoryService.getCurrentMatch();
+    this.currentMatch = this.matches[0];
+    //this.currentMatch = this.matchHistoryService.getCurrentMatch();
   }
 
   sortData(): void {

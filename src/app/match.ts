@@ -25,6 +25,9 @@ export class Match {
     public p1scoreHistory: number[][] = [];
     public p2scoreHistory: number[][] = [];
     public id: string = "initialID";
+    public formattedScores: string[] = ["0", "0"];
+    public p1formatted: string = "0";
+    public p2formatted: string = "0";
 
     constructor(p1name: string, p2name: string, gamesPerSet: number, sets: number, firstServer: number, id: string) {
         this.id = id;
@@ -72,6 +75,8 @@ export class Match {
         this.givePoint(shots);
         //check points to see if a player won a game, set, or match
         this.checkPoints();
+        //format the score so that it can be easily exported
+        this.formatGameScore();
     }
 
     recordHistory(shots: number) {
@@ -220,6 +225,46 @@ export class Match {
         }
 
     }
+
+    formatGameScore() {
+      //if it's in a tiebreaker
+      if (this.getTiebreakerScore()[0] > 0 || this.getTiebreakerScore()[1] > 0) {
+        this.formattedScores = [this.getTiebreakerScore()[0].toLocaleString(),
+                                this.getTiebreakerScore()[1].toLocaleString()]
+      } else if (this.getSuperScore()[0] > 0 || this.getSuperScore()[1] > 0) {
+        //if it's in a super tiebreaker
+        this.formattedScores = [this.getSuperScore()[0].toLocaleString(),
+                                this.getSuperScore()[1].toLocaleString()]
+      } else {
+        //change the score formatting for games into 15, 30, 40
+        var modifiedGameScores: string[] = ["0", "0"];
+        var gameScore: Number[] = this.getGameScore();
+        for (let i = 0; i < gameScore.length; i++) {
+          if (gameScore[i] == 1) {
+            this.formattedScores[i] = "15";
+          } else if (gameScore[i] == 2) {
+            this.formattedScores[i] = "30";
+          } else if (gameScore[i] == 3) {
+            this.formattedScores[i] = "40";
+          } else {
+            this.formattedScores[i] = "0";
+          }
+        }
+        //account for deuce games
+        if (gameScore[0] >= 3 && gameScore[1] >= 3) {
+          //the game is tied, back to deuce
+          if (gameScore[0] == gameScore[1]) {
+            this.formattedScores = ["40", "40"];
+          } else if (gameScore[0] > gameScore[1]) {
+            this.formattedScores = ["AD", "40"];
+          } else {
+            this.formattedScores = ["40", "AD"];
+          }
+        }
+      this.p1formatted = this.formattedScores[0];
+      this.p2formatted = this.formattedScores[1];
+    }
+  }
 
     getSetScore() {
       //returns the current score of each set

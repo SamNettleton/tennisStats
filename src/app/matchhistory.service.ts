@@ -10,6 +10,7 @@ export class MatchHistoryService {
 
   public MATCHES: Match[] = [];
   public defaultMatch: Match = new Match('Sam', 'Will', 6, 2, 1, "randomID");
+  public activeMatch: number = 0;
 
   constructor(private matchStorageService: MatchStorageService, private storage: Storage) {
     //this.updateFromStorage();
@@ -24,38 +25,38 @@ export class MatchHistoryService {
 
   }
 
-  getMatches(): Match[] {
-    this.storage.get('savedMatches').then((val) => {
-      this.MATCHES = val[val.length - 1];
-    })
-    return this.MATCHES;
+  getMatches(): Promise<Match[]> {
+    return this.storage.get('savedMatches');
   }
 
-/*
-  updateFromStorage() {
-    this.matchStorageService.getAllMatches().then(res => {
-      this.MATCHES = res;
-    })
-  }*/
-
   getCurrentMatch(): Match {
-    //this.updateFromStorage();
-    this.storage.get('savedMatches').then((val) => {
-      this.MATCHES = val[val.length - 1];
-    })
-    return this.MATCHES[0];
-    //return this.defaultMatch;
+    this.getMatches().then(items => {
+      this.MATCHES = items;
+      console.log(items);
+    });
+    return this.MATCHES[this.activeMatch];
   }
 
   addMatch(match: Match) {
-    if (this.getMatches() == null) {
-      this.MATCHES = [];
-    } else {
-      this.MATCHES = this.getMatches();
-    }
-    this.MATCHES.push(match);
-    this.storage.set('savedMatches', this.MATCHES);
+    return this.storage.get('savedMatches').then((items: Match[]) => {
+      if (items) {
+        items.push(match);
+        console.log(items);
+        console.log("old list");
+        return this.storage.set('savedMatches', items);
+      } else {
+        console.log("new list");
+        return this.storage.set('savedMatches', [match]);
+      }
+    });
+  }
 
+  setActive(index: number) {
+    this.activeMatch = index;
+  }
+
+  getActive() {
+    return this.activeMatch;
   }
 
 }
