@@ -1,0 +1,146 @@
+<ion-grid>
+  <ion-row>
+    <ion-col size="1" style="background-color:orange; color:black;">
+    </ion-col>
+    <ion-col size="4" style="background-color:orange; color:black;">
+    </ion-col>
+    <ion-col class="set-score" size="1" *ngFor="let g of currentMatch.p1games; let i = index" (click)="increaseGame(i, '1')">
+      <ion-icon name="arrow-round-up"></ion-icon>
+    </ion-col>
+    <ion-col class="game-score" size="1" (click)="increasePoint('1')">
+      <ion-icon name="arrow-round-up"></ion-icon>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="1" style="background-color:orange; color:black;">
+      <div id="p1servingRadio" (click)="changeServer('1')">
+        <ion-icon name="radio-button-on"></ion-icon>
+      </div>
+    </ion-col>
+    <ion-col size="4" style="background-color:orange; color:black;">
+      <div id="p1name">
+        {{currentMatch.p1name}}
+      </div>
+    </ion-col>
+    <ion-col id="pp1score0" class="set-score" size="1">
+      <div>
+        0
+      </div>
+    </ion-col>
+    <ion-col id="pp1score1" class="game-score" size="1">
+      <div>
+        0
+      </div>
+    </ion-col>
+    <ion-col id="pp1score2" class="none-score" size="1">
+      <div>
+
+      </div>
+    </ion-col>
+    <ion-col id="pp1score3" class="none-score" size="1">
+      <div>
+
+      </div>
+    </ion-col>
+    <ion-col id="pp1score4" class="none-score" size="1">
+      <div>
+
+      </div>
+    </ion-col>
+    <ion-col id="pp1score5" class="none-score">
+      <div>
+
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="1" style="background-color:orange; color:black;">
+    </ion-col>
+    <ion-col size="4" style="background-color:orange; color:black;">
+    </ion-col>
+    <ion-col class="set-score" size="1" *ngFor="let g of currentMatch.p1games; let i = index" (click)="decreaseGame(i, '1')">
+      <ion-icon name="arrow-round-down"></ion-icon>
+    </ion-col>
+    <ion-col class="game-score" size="1" (click)="decreasePoint('1')">
+      <ion-icon name="arrow-round-down"></ion-icon>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size="1">
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size="1" style="background-color:orange; color:black;">
+    </ion-col>
+    <ion-col size="4" style="background-color:orange; color:black;">
+    </ion-col>
+    <ion-col class="set-score" size="1" *ngFor="let g of currentMatch.p2games; let i = index" (click)="increaseGame(i, '2')">
+      <ion-icon name="arrow-round-up"></ion-icon>
+    </ion-col>
+    <ion-col class="game-score" size="1" (click)="increasePoint('2')">
+      <ion-icon name="arrow-round-up"></ion-icon>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="1" class="set-score">
+      <div id="p2servingRadio" (click)="changeServer('2')">
+        <ion-icon name="radio-button-off"></ion-icon>
+      </div>
+    </ion-col>
+    <ion-col size="4" style="background-color:orange; color:black;">
+      <div>
+        {{currentMatch.p2name}}
+      </div>
+    </ion-col>
+    <ion-col id="pp2score0" class="set-score" size="1">
+      <div>
+        0
+      </div>
+    </ion-col>
+    <ion-col id="pp2score1" class="game-score" size="1">
+      <div>
+        0
+      </div>
+    </ion-col>
+    <ion-col id="pp2score2" class="none-score" size="1">
+      <div>
+      </div>
+    </ion-col>
+    <ion-col id="pp2score3" class="none-score" size="1">
+      <div>
+      </div>
+    </ion-col>
+    <ion-col id="pp2score4" class="none-score" size="1">
+      <div>
+      </div>
+    </ion-col>
+    <ion-col id="pp2score5" class="none-score" size="1">
+      <div>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="1" class="set-score">
+    </ion-col>
+    <ion-col size="4" class="set-score">
+    </ion-col>
+    <ion-col class="set-score" size="1" *ngFor="let g of currentMatch.p1games; let i = index" (click)="decreaseGame(i, '2')">
+      <ion-icon name="arrow-round-down"></ion-icon>
+    </ion-col>
+    <ion-col class="game-score" size="1" (click)="decreasePoint('2')">
+      <ion-icon name="arrow-round-down"></ion-icon>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<ion-grid>
+  <ion-row>
+    <ion-col size="6">
+      <ion-button id="btncancel" color="secondary" class="button-full">Cancel</ion-button>
+    </ion-col>
+    <ion-col size="6">
+      <ion-button id="btnsave" color="secondary" class="button-full">Save</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>

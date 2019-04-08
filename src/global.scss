@@ -9,3 +9,16 @@
 @import '~@ionic/angular/css/text-alignment.css';
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
+
+.ionic-popover {
+  max-width: 100% !important;
+  border-radius: 0 !important;
+  border: none !important;
+  background-color: transparent !important;
+  width: 100px;
+}
+
+.contact-popover .popover-content{
+  position: absolute;
+  width: 90%;
+}

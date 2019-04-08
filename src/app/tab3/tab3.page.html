@@ -1,12 +1,15 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="track-match"></ion-back-button>
+    </ion-buttons>
+    <ion-title id="p2NameTitle">
       Tab Three
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div id="main" echarts [options]="options"></div>
+  <div id="p2graph" echarts [options]="optionsp2"></div>
 
 </ion-content>

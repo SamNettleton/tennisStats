@@ -6,6 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { TrackMatchPage } from './track-match.page';
+import { ComponentsModule } from '../components/components.module';
+import { ScorePopoverComponent } from '../components/score-popover/score-popover.component';
 
 const routes: Routes = [
   {
@@ -19,7 +21,11 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    ComponentsModule,
     RouterModule.forChild(routes)
+  ],
+  entryComponents: [
+        ScorePopoverComponent,
   ],
   declarations: [TrackMatchPage]
 })

@@ -1,5 +1,8 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="updateStorage()"></ion-back-button>
+    </ion-buttons>
     <ion-title>Match Tracking</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,7 +12,7 @@
 <div class="box">
 
 <div class="row header">
-<ion-grid>
+<ion-grid (click)="editScores()">
   <ion-row>
     <ion-col size="1" style="background-color:orange; color:black;">
       <div id="p1serving">
@@ -19,33 +22,33 @@
       <div id="p1name">
       </div>
     </ion-col>
-    <ion-col class="set-score" style="background-color:orange; color:black;">
-      <div id="p1score0">
+    <ion-col id="p1score0" class="set-score" size="1">
+      <div>
         0
       </div>
     </ion-col>
-    <ion-col class="game-score" style="background-color:white; color:black;">
-      <div id="p1score1">
+    <ion-col id="p1score1" class="game-score" size="1">
+      <div>
         0
       </div>
     </ion-col>
-    <ion-col class="set-score" style="background-color:white; color:black;">
-      <div id="p1score2">
+    <ion-col id="p1score2" class="none-score" size="1">
+      <div>
 
       </div>
     </ion-col>
-    <ion-col class="set-score" style="background-color:white; color:black;">
-      <div id="p1score3">
+    <ion-col id="p1score3" class="none-score" size="1">
+      <div>
 
       </div>
     </ion-col>
-    <ion-col class="set-score" style="background-color:white; color:black;">
-      <div id="p1score4">
+    <ion-col id="p1score4" class="none-score" size="1">
+      <div>
 
       </div>
     </ion-col>
-    <ion-col class="set-score" style="background-color:white; color:black;">
-      <div id="p1score5">
+    <ion-col id="p1score5" class="none-score">
+      <div>
 
       </div>
     </ion-col>
@@ -59,30 +62,41 @@
       <div id="p2name">
       </div>
     </ion-col>
-    <ion-col class="set-score" style="background-color:orange; color:black;">
-      <div id="p2score0">
+    <ion-col id="p2score0" class="set-score" size="1">
+      <div>
         0
       </div>
     </ion-col>
-    <ion-col class="game-score"style="background-color:white; color:black;">
-      <div id="p2score1">
+    <ion-col id="p2score1" class="game-score" size="1">
+      <div>
         0
       </div>
     </ion-col>
-    <ion-col class="set-score" style="background-color:white; color:black;">
-      <div id="p2score2">
+    <ion-col id="p2score2" class="none-score" size="1">
+      <div>
+
       </div>
     </ion-col>
-    <ion-col class="set-score" style="background-color:white; color:black;">
-      <div id="p2score3">
+    <ion-col id="p2score3" class="none-score" size="1">
+      <div>
+
       </div>
     </ion-col>
-    <ion-col class="set-score" style="background-color:white; color:black;">
-      <div id="p2score4">
+    <ion-col id="p2score4" class="none-score" size="1">
+      <div>
+
       </div>
     </ion-col>
-    <ion-col class="set-score" style="background-color:white; color:black;">
-      <div id="p2score5">
+    <ion-col id="p2score5" class="none-score">
+      <div>
+
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12">
+      <div class="edit-score">
+        Tap current score to edit
       </div>
     </ion-col>
   </ion-row>
@@ -91,7 +105,7 @@
 <ion-grid>
   <ion-row>
     <ion-col size="6" offset="0">
-      <div id="shot-counter-label">
+      <div id="shot-counter-label" class="align-right">
         Rally Length:
       </div>
     </ion-col>
@@ -103,25 +117,103 @@
   </ion-row>
   <ion-row>
     <ion-col size="6">
-      <ion-button id="undo-point" class="button-full">Undo Point</ion-button>
+      <ion-button id="undo-point" color="secondary" class="button-full">Undo Point</ion-button>
     </ion-col>
     <ion-col size="6">
-      <ion-button id="view-stats" class="button-full">View Stats</ion-button>
+      <ion-button id="view-stats" color="secondary" class="button-full">View Stats</ion-button>
     </ion-col>
   </ion-row>
   <ion-row>
     <ion-col size="6">
-      <ion-button id="decrease-shots" class="button-full">-</ion-button>
+      <ion-button id="decrease-shots" color="secondary" class="button-full">-</ion-button>
     </ion-col>
     <ion-col size="6">
-      <ion-button id="submit-shots" class="button-full">Submit Point</ion-button>
+      <ion-button id="submit-shots" color="secondary" class="button-full">Submit Point</ion-button>
     </ion-col>
   </ion-row>
 </ion-grid>
+
+<ion-grid no-padding>
+  <ion-row>
+    <ion-col size="6">
+      <ion-radio-group id="serveGroup">
+        <ion-list-header class="title-padding">
+          Serve Type:
+        </ion-list-header>
+        <ion-item class="no-height" (click)="changeServeType('1')">
+          <ion-label no-margin>First</ion-label>
+          <ion-radio no-margin checked="false" id="first"></ion-radio>
+        </ion-item>
+        <ion-item class="no-height" (click)="changeServeType('2')">
+          <ion-label no-margin>Second</ion-label>
+          <ion-radio no-margin checked="false" id="second"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-col>
+    <ion-col size="6">
+      <ion-radio-group id="errorGroup">
+        <ion-list-header class="title-padding">
+          Error Type:
+        </ion-list-header>
+        <ion-item class="no-height" (click)="changeErrorType('1')">
+          <ion-label no-margin>Forced</ion-label>
+          <ion-radio no-margin checked="false" id="forced"></ion-radio>
+        </ion-item>
+        <ion-item class="no-height" (click)="changeErrorType('2')">
+          <ion-label no-margin>Unforced</ion-label>
+          <ion-radio no-margin checked="false" id="unforced"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="6">
+      <ion-radio-group id="errorGroup">
+        <ion-list-header class="title-padding">
+          Return Side:
+        </ion-list-header>
+        <ion-item class="no-height" (click)="changeReturnSide('forehand')">
+          <ion-label no-margin>Forehand</ion-label>
+          <ion-radio no-margin checked="false" id="forehandreturn"></ion-radio>
+        </ion-item>
+        <ion-item class="no-height" (click)="changeReturnSide('backhand')">
+          <ion-label no-margin>Backhand</ion-label>
+          <ion-radio no-margin checked="false" id="backhandreturn"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-col>
+    <ion-col size="6">
+        <ion-list-header class="title-padding">
+          At Net?
+        </ion-list-header>
+        <ion-item class="no-height" (click)="changeNet('1')">
+          <ion-label no-margin>
+            <div id="p1netname"></div>
+          </ion-label>
+          <ion-checkbox no-margin id="p1net"></ion-checkbox>
+        </ion-item>
+        <ion-item no-margin class="no-height" (click)="changeNet('2')">
+          <ion-label no-margin>
+            <div id="p2netname"></div>
+          </ion-label>
+          <ion-checkbox no-margin id="p2net"></ion-checkbox>
+        </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="6">
+
+    </ion-col>
+    <ion-col size="6">
+
+    </ion-col>
+  </ion-row>
+</ion-grid>
+
 </div>
 
 
-    <ion-button id="increase-shots" class="row content">+</ion-button>
+<ion-button id="increase-shots" color="secondary" style="font-size:300%;" class="row content">+</ion-button>
 
 
 

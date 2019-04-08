@@ -1,9 +1,24 @@
 .set-score {
   size: 1;
+  background-color: orange;
+  color: black;
+  text-align: center;
 }
 
 .game-score {
   size: 2;
+  background-color: black;
+  color: white;
+  padding-left: 0px;
+  padding-right: 0px;
+  text-align: center;
+}
+
+.none-score {
+  background-color: white;
+  color: black;
+  font-size: 15px;
+  size: 1;
 }
 
 html,
@@ -43,4 +58,25 @@ body {
 
 .button-md {
     height: stretch;
+}
+
+.edit-score {
+  font-size: 14px;
+  text-align: center;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.no-height {
+    --min-height: 0px;
+    --inner-padding-top: 4px;
+    --inner-padding-bottom: 4px;
+}
+
+.title-padding {
+  min-height: 0px;
+  padding-top: 10px;
+  padding-bottom: 7px;
 }

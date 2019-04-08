@@ -1,0 +1,19 @@
+.scorebox {
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+}
+
+.no-padding {
+  padding: 0;
+  margin: 0;
+  border: 0px;
+}
+
+.new-match {
+  float: right;
+  vertical-align: middle;
+}
+
+ion-icon {
+  font-size: 24px;
+}

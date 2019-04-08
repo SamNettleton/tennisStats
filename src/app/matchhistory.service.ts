@@ -9,7 +9,7 @@ import { Storage } from '@ionic/storage';
 export class MatchHistoryService {
 
   public MATCHES: Match[] = [];
-  public defaultMatch: Match = new Match('Sam', 'Will', 6, 2, 1, "randomID");
+  public defaultMatch: Match = new Match('Sam', 'Will', 6, 2, 1);
   public activeMatch: number = 0;
 
   constructor(private matchStorageService: MatchStorageService, private storage: Storage) {
@@ -18,9 +18,10 @@ export class MatchHistoryService {
     var defaultRallies: number[] = [0, 0, 1, 3, 3, 9, /*game1*/
       2, 4, 4, 6, 3, 1, 5, 5, 3, 1, 7, 7, /*p1 is winning 3-1 p1 serving*/
       9, 11, 21, 2, 6, 10, 3, 1]
+    /*
     for (let i = 0; i < defaultRallies.length; i++) {
       this.defaultMatch.addPoint(defaultRallies[i]);
-    }
+    }*/
     //this.MATCHES.push(this.defaultMatch);
 
   }
@@ -38,17 +39,24 @@ export class MatchHistoryService {
   }
 
   addMatch(match: Match) {
+    this.MATCHES.push(match);
     return this.storage.get('savedMatches').then((items: Match[]) => {
       if (items) {
         items.push(match);
         console.log(items);
         console.log("old list");
+        this.setActive(items.length - 1);
         return this.storage.set('savedMatches', items);
       } else {
+        this.setActive(0);
         console.log("new list");
         return this.storage.set('savedMatches', [match]);
       }
     });
+  }
+
+  updateStorage(matches: Match[]) {
+    this.storage.set('savedMatches', matches);
   }
 
   setActive(index: number) {

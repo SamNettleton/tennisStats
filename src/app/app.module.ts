@@ -11,6 +11,10 @@ import { AppComponent } from './app.component';
 
 import { MatchStorageService } from './match-storage.service';
 import { IonicStorageModule } from '@ionic/storage';
+import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { IonicGestureConfig } from './IonicGestureConfig';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment'
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,13 +26,15 @@ import { IonicStorageModule } from '@ionic/storage';
     IonicStorageModule.forRoot({
       name: '__mydb',
 driverOrder: ['indexeddb', 'sqlite', 'websql']
-    })
+    }),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     StatusBar,
     SplashScreen,
     MatchStorageService,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: HAMMER_GESTURE_CONFIG, useClass: IonicGestureConfig }
   ],
   bootstrap: [AppComponent]
 })
